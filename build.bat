@@ -1,1 +1,1 @@
-pyinstaller main.py --onefile --windowed --icon=mech.png --name="GW2 Mech Detector"
+pyinstaller main.py --icon "mech.png" --add-data "mech.png;." --name "NoRecallMech" --onefile --windowed

@@ -1,5 +1,6 @@
 import ctypes
 import mmap
+import os
 import sys
 import time
 import json
@@ -144,22 +145,26 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--hotkey",
-        help="Specify the hotkey that should be deactivated while playing Mech.\n\nFor modifier keys, use the following format: ctrl+shift+k.",
-        default="f4",
-    )
+    if getattr(sys, "frozen", False):
+        os.environ["BUNDLE_DIR"] = sys._MEIPASS  # type: ignore
+    else:
+        os.environ["BUNDLE_DIR"] = os.path.dirname(os.path.abspath(__file__))
 
-    icon = Image.open("mech.png")
+    icon = Image.open(os.path.join(os.environ["BUNDLE_DIR"], "mech.png"))
     tray = Icon(
-        "GW2 Mech Detector",
-        title="GW2 Mech Detector",
+        "GW2 NoRecallMech",
+        title="GW2 NoRecallMech",
         icon=icon,
         menu=Menu(MenuItem("Exit", lambda: tray.stop())),
     )
 
     try:
+        parser = argparse.ArgumentParser(description="GW2 NoRecallMech")
+        parser.add_argument(
+            "--hotkey",
+            help="Specify the hotkey that should be deactivated while playing Mech.\n\nFor modifier keys, use the following format: ctrl+shift+k.",
+            default="f4",
+        )
         args = parser.parse_args()
     except argparse.ArgumentError as e:
         tray.notify("❌ Error with arguments", str(e))
