@@ -34,6 +34,11 @@ Pretty straightforward I think. :)
 > Tip: You can create a shortcut to the program and add the command line argument to the target field.
 > Like this: `"C:\path\to\NoRecallMech.exe" --hotkey=f4`
 
+## Limitations
+
+- Only works on Windows (key suppression)
+- Only works with the Mechanist elite spec
+
 ## FAQ
 
 ### How does it work? Is it safe?
