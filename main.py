@@ -87,21 +87,46 @@ class MumbleLink:
 
 
 class HotkeyManager:
-    def __init__(self, tray: Icon, hotkey: str):
+    def __init__(self, hotkey: str, tray: Icon):
         self.tray = tray
         self.hotkey = hotkey
-        self.hk = None
+        self.hotkey_set = set()  # scan code(s) of our hotkey
+        self.active_keys = set()  # scan codes of all currently pressed keys
+        self.keyboard_hook = None
+        self._make_hotkey_set()
+
+    def _make_hotkey_set(self):
+        for key in self.hotkey.split("+"):
+            self.hotkey_set.add(
+                keyboard.key_to_scan_codes(key)[0]  # not sure what index 1 is for
+            )
 
     def suppress(self):
-        self.hk = keyboard.add_hotkey(self.hotkey, lambda: None, suppress=True)
+        self.keyboard_hook = keyboard.hook(self._on_key_event, suppress=True)
         self.tray.notify(f"{self.hotkey.upper()} DISABLED", " ")
 
     def release(self):
-        if not self.hk:
+        if not self.keyboard_hook:
             return None
-        keyboard.remove_hotkey(self.hk)
-        self.hk = None
+        try:
+            keyboard.unhook(self.keyboard_hook)
+        except KeyError as e:
+            print(f"KeyError: {e}")
         self.tray.notify(f"{self.hotkey.upper()} ENABLED", " ")
+
+    def _on_key_event(self, event):
+        if event.event_type == "down":
+            self.active_keys.add(event.scan_code)
+        elif event.event_type == "up":
+            self.active_keys.discard(event.scan_code)
+            return True  # as we are releasing keys, there's no need to block
+
+        # block our hotkey regardless of any additional keys
+        if self.hotkey_set.issubset(self.active_keys):
+            print(f"blocked {self.hotkey}")
+            return False  # block
+
+        return True  # pass
 
 
 def getForegroundWindowTitle() -> str:
@@ -171,7 +196,7 @@ def main():
         tray.notify("❌ Error with arguments", str(e))
         sys.exit(1)
 
-    hkm = HotkeyManager(tray, args.hotkey)
+    hkm = HotkeyManager(args.hotkey, tray)
 
     try:
         ml = MumbleLink()
