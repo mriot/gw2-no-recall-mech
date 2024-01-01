@@ -1,15 +1,15 @@
+import argparse
 import ctypes
+import json
 import mmap
 import os
 import sys
-import time
-import json
 import threading
-import argparse
+import time
 
-from pystray import Icon, Menu, MenuItem
-from PIL import Image
 import keyboard
+from PIL import Image
+from pystray import Icon, Menu, MenuItem
 
 
 class Link(ctypes.Structure):
