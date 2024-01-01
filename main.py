@@ -126,6 +126,7 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
 
         if not mumble_link.data.uiTick:
             print("Waiting for data...")
+            time.sleep(3)
             continue
 
         # print(mumble_link.data.identity)
