@@ -131,27 +131,13 @@ class HotkeyManager:
         return True  # pass
 
 
-def getForegroundWindowTitle() -> str:
-    user32 = ctypes.windll.user32
-    hwnd = user32.GetForegroundWindow()
-    title_length = 256
-    title_buffer = ctypes.create_unicode_buffer(title_length)
-    user32.GetWindowTextW(hwnd, title_buffer, title_length)
-    return title_buffer.value
-
-
-def observer(mumble_link: MumbleLink, hotkey: HotkeyManager, tray: Icon) -> None:
+def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
     while True:
-        if getForegroundWindowTitle() != "Guild Wars 2":
-            hotkey.release()
-            print("GW2 not in focus...")
-            time.sleep(1)
-            continue
-
         mumble_link.read()
 
-        if not mumble_link.data.uiTick:
-            print("Waiting for MumbleLink data...")
+        # uint32_t uiState; Bitmask: Bit 4 (Game has focus)
+        if not int(mumble_link.context.uiState) & 0b0001000:  # type: ignore
+            hotkey.release()
             time.sleep(1)
             continue
 
@@ -159,10 +145,8 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager, tray: Icon) -> None
         id = json.loads(str(mumble_link.data.identity))
 
         if id.get("profession") == 3 and id.get("spec") == 70:
-            print("Mech detected!")
             hotkey.suppress()
         else:
-            print("Not a mech...")
             hotkey.release()
 
         time.sleep(1)
@@ -197,7 +181,7 @@ def main():
 
     try:
         ml = MumbleLink()
-        threading.Thread(target=observer, args=(ml, hkm, tray), daemon=True).start()
+        threading.Thread(target=observer, args=(ml, hkm), daemon=True).start()
     except Exception as e:
         tray.notify("❌ Error with MumbleLink", str(e))
         sys.exit(1)
