@@ -102,16 +102,18 @@ class HotkeyManager:
             )
 
     def suppress(self):
+        if self.keyboard_hook:
+            return None
+
         self.keyboard_hook = keyboard.hook(self._on_key_event, suppress=True)
         self.tray.notify(f"{self.hotkey.upper()} DISABLED", " ")
 
     def release(self):
         if not self.keyboard_hook:
             return None
-        try:
-            keyboard.unhook(self.keyboard_hook)
-        except KeyError as e:
-            print(f"KeyError: {e}")
+
+        keyboard.unhook(self.keyboard_hook)
+        self.keyboard_hook = None
         self.tray.notify(f"{self.hotkey.upper()} ENABLED", " ")
 
     def _on_key_event(self, event):
@@ -138,36 +140,32 @@ def getForegroundWindowTitle() -> str:
     return title_buffer.value
 
 
-def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
-    was_mech_before = False
-
+def observer(mumble_link: MumbleLink, hotkey: HotkeyManager, tray: Icon) -> None:
     while True:
         if getForegroundWindowTitle() != "Guild Wars 2":
             hotkey.release()
-            time.sleep(5)
+            print("GW2 not in focus...")
+            time.sleep(1)
             continue
 
         mumble_link.read()
 
         if not mumble_link.data.uiTick:
-            print("Waiting for data...")
-            time.sleep(3)
+            print("Waiting for MumbleLink data...")
+            time.sleep(1)
             continue
 
         # print(mumble_link.data.identity)
-
         id = json.loads(str(mumble_link.data.identity))
 
         if id.get("profession") == 3 and id.get("spec") == 70:
-            if not was_mech_before:
-                hotkey.suppress()
-            was_mech_before = True
+            print("Mech detected!")
+            hotkey.suppress()
         else:
-            if was_mech_before:
-                hotkey.release()
-            was_mech_before = False
+            print("Not a mech...")
+            hotkey.release()
 
-        time.sleep(2)
+        time.sleep(1)
 
 
 def main():
@@ -188,19 +186,18 @@ def main():
         parser = argparse.ArgumentParser(description="GW2 NoRecallMech")
         parser.add_argument(
             "--hotkey",
-            help="Specify the hotkey that should be deactivated while playing Mech.\n\nFor modifier keys, use the following format: ctrl+shift+k.",
+            help="Specify the hotkey that should be deactivated while playing as machanist.\n\nUse the format: ctrl+shift+k.",
             default="f4",
         )
         args = parser.parse_args()
+        hkm = HotkeyManager(args.hotkey, tray)
     except argparse.ArgumentError as e:
-        tray.notify("❌ Error with arguments", str(e))
+        tray.notify("❌ Error with hotkey", str(e))
         sys.exit(1)
-
-    hkm = HotkeyManager(args.hotkey, tray)
 
     try:
         ml = MumbleLink()
-        threading.Thread(target=observer, args=(ml, hkm), daemon=True).start()
+        threading.Thread(target=observer, args=(ml, hkm, tray), daemon=True).start()
     except Exception as e:
         tray.notify("❌ Error with MumbleLink", str(e))
         sys.exit(1)
@@ -210,4 +207,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)
