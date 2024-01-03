@@ -159,14 +159,14 @@ def main():
     s.bind(("127.0.0.1", 57827))
     s.listen(1)
 
-    # determine if we are running from a bundle or from source
+    # get path to unpacked files
     if getattr(sys, "frozen", False):
-        os.environ["NORECALLMECH_DIR"] = sys._MEIPASS  # type: ignore
+        unpack_dir = sys._MEIPASS  # type: ignore
     else:
-        os.environ["NORECALLMECH_DIR"] = os.path.dirname(os.path.abspath(__file__))
+        unpack_dir = os.path.dirname(os.path.abspath(__file__))
 
     # create tray icon
-    icon = Image.open(os.path.join(os.environ["NORECALLMECH_DIR"], "mech.png"))
+    icon = Image.open(os.path.join(unpack_dir, "mech.png"))
     tray = Icon(
         "GW2 NoRecallMech",
         title="GW2 NoRecallMech",
