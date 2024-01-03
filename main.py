@@ -4,9 +4,9 @@ import json
 import mmap
 import os
 import sys
-import threading
-import time
 from socket import socket
+from threading import Thread
+from time import sleep
 
 import keyboard
 from PIL import Image
@@ -139,7 +139,7 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
         # uint32_t uiState; Bitmask: Bit 4 (Game has focus)
         if not int(mumble_link.context.uiState) & 0b0001000:  # type: ignore
             hotkey.release()
-            time.sleep(1)
+            sleep(1)
             continue
 
         # print(mumble_link.data.identity)
@@ -150,7 +150,7 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
         else:
             hotkey.release()
 
-        time.sleep(1)
+        sleep(1)
 
 
 def main():
@@ -189,7 +189,7 @@ def main():
 
     try:
         ml = MumbleLink()
-        threading.Thread(target=observer, args=(ml, hkm), daemon=True).start()
+        Thread(target=observer, args=(ml, hkm), daemon=True).start()
     except Exception as e:
         tray.notify("❌ Error with MumbleLink", str(e))
         sys.exit(1)
