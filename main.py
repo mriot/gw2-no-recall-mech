@@ -133,7 +133,7 @@ class HotkeyManager:
 
 
 def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
-    while True:
+    while not mumble_link.memfile.closed:
         mumble_link.read()
 
         # uint32_t uiState; Bitmask: Bit 4 (Game has focus)
@@ -161,11 +161,12 @@ def main():
 
     # determine if we are running from a bundle or from source
     if getattr(sys, "frozen", False):
-        os.environ["BUNDLE_DIR"] = sys._MEIPASS  # type: ignore
+        os.environ["NORECALLMECH_DIR"] = sys._MEIPASS  # type: ignore
     else:
-        os.environ["BUNDLE_DIR"] = os.path.dirname(os.path.abspath(__file__))
+        os.environ["NORECALLMECH_DIR"] = os.path.dirname(os.path.abspath(__file__))
 
-    icon = Image.open(os.path.join(os.environ["BUNDLE_DIR"], "mech.png"))
+    # create tray icon
+    icon = Image.open(os.path.join(os.environ["NORECALLMECH_DIR"], "mech.png"))
     tray = Icon(
         "GW2 NoRecallMech",
         title="GW2 NoRecallMech",
@@ -193,7 +194,7 @@ def main():
         tray.notify("❌ Error with MumbleLink", str(e))
         sys.exit(1)
 
-    tray.run()
+    tray.run()  # blocks until tray.stop() is called
     ml.close()
 
 
