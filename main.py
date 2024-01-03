@@ -6,6 +6,7 @@ import os
 import sys
 import threading
 import time
+from socket import socket
 
 import keyboard
 from PIL import Image
@@ -153,6 +154,12 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
 
 
 def main():
+    # mutex to prevent multiple instances of the app
+    s = socket()
+    s.bind(("127.0.0.1", 57827))
+    s.listen(1)
+
+    # determine if we are running from a bundle or from source
     if getattr(sys, "frozen", False):
         os.environ["BUNDLE_DIR"] = sys._MEIPASS  # type: ignore
     else:
