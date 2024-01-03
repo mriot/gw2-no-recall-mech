@@ -1,37 +1,41 @@
 # No Recall Mech (Guild Wars 2 Tool)
 
-This little tool disables your keybind for <img src="https://github.com/mriot/mriot/assets/24588573/48ea15fe-030f-4d2b-951b-c0029d58aa5c" height="16" alt="recall mech skill icon">[Recall Mech](https://wiki.guildwars2.com/wiki/Recall_Mech)  while you are playing as mechanist.
+This tool disables your keybind for <img src="https://github.com/mriot/mriot/assets/24588573/48ea15fe-030f-4d2b-951b-c0029d58aa5c" align="center" height="30" alt="recall mech skill icon"> [Recall Mech](https://wiki.guildwars2.com/wiki/Recall_Mech)  while you are playing as mechanist.
 
 **Why?**  
 "Recall Mech" sends your Mech into oblivion which can be quite annoying if you are in the middle of a fight and accidentally press the hotkey (default <kbd>F4</kbd>).
 
-Your keybind is only managed while Guild Wars 2 is running and you are playing as an engineer with the Mechanist spec equipped.  
-If you tab out of the game, the keybind will be immediately restored.
+Your keybind is only disabled while you are playing as an engineer with the Mechanist spec active.  
+If you tab out of the game or change your build to another spec, the keybind will be immediately restored.
 
 ## Usage
 
-Download `NoRecallMech.exe` from the [latest release](/) and place it anywhere you want.
+Download `NoRecallMech.exe` from the [latest release](https://github.com/mriot/gw2-no-recall-mech/releases) and place it anywhere you want.
 
-While it runs a little Mechanist icon <img src="./mech.png" height="20" alt="mech"> will show in your system tray.  
-Right click the icon to exit.
+You can start the tool before launching GW2 or after, it will detect the game either way.  
+While it runs a little Mechanist icon <img src="./mech.png" align="center" height="22" alt="mech"> will show in your system tray. Right click it to exit.
 
 ### Keybind
 
-You can customize which hotkey will be disabled by providing it as a command line argument.
+You can customize which keybind will be disabled by providing it as a command line argument.
 
 Supported modifier keys are: `ctrl`, `alt`, `shift` and `windows`.
 
-For example, if you want to disable the hotkey <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd> you would start the program like this:
+#### Examples
 
+<kbd>F4</kbd> (default)  
+`NoRecallMech.exe --hotkey=f4`
+
+<kbd>Shift</kbd> + <kbd>4</kbd>  
+`NoRecallMech.exe --hotkey=shift+4`
+
+<kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd>  
 `NoRecallMech.exe --hotkey=ctrl+shift+1`
 
-For <kbd>F5</kbd>  
-`NoRecallMech.exe --hotkey=f5`
-
-For <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>  
+<kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>  
 `NoRecallMech.exe --hotkey=alt+shift+s`
 
-#### Tip: Create a shortcut
+#### 💡 Tip: Create a shortcut
 
 You can create a shortcut to this tool and add the command line argument to the target field.  
 Like this: `"C:\path\to\NoRecallMech.exe" --hotkey=f4`
@@ -40,16 +44,17 @@ Like this: `"C:\path\to\NoRecallMech.exe" --hotkey=f4`
 
 ### Notifications
 
-Sometimes if you start the tool and then immediately tab into the game, the first notification will fail to show but the keybind should still be suppressed (if you are playing as a mechanist).
+Sometimes if you start the tool and then immediately tab into the game, the **first** notification may fail to show but the keybind will still be suppressed.
 
-### Keybinds
+### Keybind blocking
 
-Keybinds in GW2 function even when additional keys are pressed simultaneously, enabling you to walk while casting a skill.  
-However, suppressing specific keybinds can be a bit challenging. This tool identifies all simultaneously pressed keys and checks if your hotkey is among them.  
-If so, the keypress event will be suppressed.
+In GW2, keybinds function even when other keys are pressed simultaneously, allowing you to walk while casting a skill.  
+This, however, makes it a bit challenging to suppress specific keybinds. To address this, the tool identifies all simultaneously pressed keys and checks if your hotkey is among them.  
+If that's the case, the keypress event will be suppressed.
+
 As a result, if you continuously hold your hotkey down, subsequent keypresses will not be detected by the game.
 
-In my tests, this wasn't really an issue. In fact I barely noticed it at all as you typically tap the hotkey briefly by accident rather than holding it down for extended periods.
+However, in my tests, this wasn't really an issue. In fact I didn't even notice it at all as you typically tap the hotkey briefly by accident rather than holding it down for extended periods.
 
 ## FAQ
 
@@ -61,11 +66,11 @@ The tool does not interact with the game at all.
 
 ### Why not use class specific keybinds?
 
-I play about 6 builds on the engineer and I don't want to unbind <kbd>F4</kbd> every time I switch to a mech build.
+I play about 6 builds on the engineer and don't want to unbind <kbd>F4</kbd> every time I switch to a mech build.
 
 ### Is it a virus?
 
-No. You can check the code and pack it yourself if you don't trust me. :)  
+No. You can check the code and pack it yourself if you don't trust me. 🙂  
 It might get detected as a keylogger by your antivirus software since it hooks keyboard events.
 
 ## Setup for development
@@ -78,12 +83,12 @@ Create a virtual environment and install the dependencies:
 python -m venv .venv; .venv\Scripts\activate; pip install pyinstaller -r requirements.txt
 ```
 
-Build using pyinstaller: See [build.bat](./build.bat)
+Build the .exe with pyinstaller. See [build.bat](./build.bat)
 
 ## Credits
 
 - Gw2 Wiki Contributors for the [MumbleLink example code](https://wiki.guildwars2.com/wiki/API:MumbleLink/Example_implementation_(Python))
-- App icon: "Mechanist" icon by ArenaNet
+- App icon "Mechanist" by ArenaNet
 
 ---
 
