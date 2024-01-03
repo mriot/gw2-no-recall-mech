@@ -83,3 +83,16 @@ Build using pyinstaller: See [build.bat](./build.bat)
 ## Credits
 
 - Gw2 Wiki Contributors for the [MumbleLink example code](https://wiki.guildwars2.com/wiki/API:MumbleLink/Example_implementation_(Python))
+- App icon: "Mechanist" icon by ArenaNet
+
+---
+
+## Disclaimer
+
+This project is independent and not affiliated with ArenaNet, Guild Wars 2, or any of their partners. All copyrights are reserved to their respective owners. The use of any trademarks, logos, or other intellectual property of ArenaNet, Guild Wars 2, or their partners is purely for descriptive and informational purposes.
+
+This tool's purpose is to enhance user experience within the context of Guild Wars 2. While we strive for accuracy and reliability, we cannot guarantee the tool's compatibility with all systems or the accuracy of the information presented. Users should exercise their own discretion and adhere to the terms of service and policies of Guild Wars 2.
+
+By using this tool, you acknowledge that any reliance on the tool or its information is at your own risk. We disclaim any liability for damages or losses incurred, directly or indirectly, as a result of the use or reliance on this project.
+
+This disclaimer is subject to change without notice, and it is advisable to review periodically for any updates. If you do not agree with any part of this disclaimer, we recommend refraining from using the tool.
