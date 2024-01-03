@@ -40,7 +40,7 @@ Like this: `"C:\path\to\NoRecallMech.exe" --hotkey=f4`
 
 ### Notifications
 
-Sometimes if you start the tool and then immediately tab into the game, the notification will fail to show but the keybind should still be suppressed (if you are playing as a mechanist).
+Sometimes if you start the tool and then immediately tab into the game, the first notification will fail to show but the keybind should still be suppressed (if you are playing as a mechanist).
 
 ### Keybinds
 
@@ -55,9 +55,9 @@ In my tests, this wasn't really an issue. In fact I barely noticed it at all as 
 
 ### How does it work? Is it safe?
 
-Yes, it's safe. It uses the offical [Mumble Link API](https://wiki.guildwars2.com/wiki/API:MumbleLink) to detect if you are playing as an engineer with a Mechanist build active.  
+Yes, pretty safe I'd say. It uses the offical [Mumble Link API](https://wiki.guildwars2.com/wiki/API:MumbleLink) to detect if you are playing as an engineer with a Mechanist build active.  
 Your hotkey for "Recall Mech" gets caught and suppressed before it reaches the game.  
-It does not interact with the game in any other way.
+The tool does not interact with the game at all.
 
 ### Why not use class specific keybinds?
 
@@ -66,7 +66,7 @@ I play about 6 builds on the engineer and I don't want to unbind <kbd>F4</kbd> e
 ### Is it a virus?
 
 No. You can check the code and pack it yourself if you don't trust me. :)  
-It might get detected as a virus by your antivirus software since it hooks keyboard events like a keylogger would do.
+It might get detected as a keylogger by your antivirus software since it hooks keyboard events.
 
 ## Setup for development
 
@@ -78,17 +78,8 @@ Create a virtual environment and install the dependencies:
 python -m venv .venv; .venv\Scripts\activate; pip install pyinstaller -r requirements.txt
 ```
 
-Build using pyinstaller:
-
-See [build.bat](./build.bat) for details. Remove `--windowed` for .exe debugging.
+Build using pyinstaller: See [build.bat](./build.bat)
 
 ## Credits
 
 - Gw2 Wiki Contributors for the [MumbleLink example code](https://wiki.guildwars2.com/wiki/API:MumbleLink/Example_implementation_(Python))
-
-## Todo
-
-- [ ] Detect if character is loaded into a map
-- [ ] --debug flag to create a log file
-- [ ] Statistics to show how often the hotkey was suppressed (maybe show in tray menu)
-- [ ] Show version in tray menu
