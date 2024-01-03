@@ -1,6 +1,6 @@
 # No Recall Mech (Guild Wars 2 Tool)
 
-This tool disables your keybind for <img src="https://github.com/mriot/mriot/assets/24588573/48ea15fe-030f-4d2b-951b-c0029d58aa5c" align="center" height="30" alt="recall mech skill icon"> [Recall Mech](https://wiki.guildwars2.com/wiki/Recall_Mech)  while you are playing as mechanist.
+This tool disables your keybind for <img src="https://github.com/mriot/mriot/assets/24588573/48ea15fe-030f-4d2b-951b-c0029d58aa5c" align="top" height="30" alt="recall mech skill icon"> [Recall Mech](https://wiki.guildwars2.com/wiki/Recall_Mech)  while you are playing as mechanist.
 
 **Why?**  
 "Recall Mech" sends your Mech into oblivion which can be quite annoying if you are in the middle of a fight and accidentally press the hotkey (default <kbd>F4</kbd>).
@@ -13,7 +13,7 @@ If you tab out of the game or change your build to another spec, the keybind wil
 Download `NoRecallMech.exe` from the [latest release](https://github.com/mriot/gw2-no-recall-mech/releases) and place it anywhere you want.
 
 You can start the tool before launching GW2 or after, it will detect the game either way.  
-While it runs a little Mechanist icon <img src="./mech.png" align="center" height="22" alt="mech"> will show in your system tray. Right click it to exit.
+While it runs a little Mechanist icon <img src="./mech.png" align="top" height="22" alt="mech"> will show in your system tray. Right click it to exit.
 
 ### Keybind
 
