@@ -10,7 +10,8 @@ If you tab out of the game or change your build to another spec, the keybind wil
 
 ## Usage
 
-Download `NoRecallMech.exe` from the [latest release](https://github.com/mriot/gw2-no-recall-mech/releases) and place it anywhere you want.
+Download `NoRecallMech.exe` from the [latest release](https://github.com/mriot/gw2-no-recall-mech/releases) and place it anywhere you want.  
+[Is this a virus?](#is-it-a-virus)
 
 You can start the tool before launching GW2 or after, it will detect the game either way.  
 While it runs a little Mechanist icon <img src="./mech.png" align="top" height="22" alt="mech"> will show in your system tray. Right click it to exit.
@@ -70,8 +71,9 @@ I play about 6 builds on the engineer and don't want to unbind <kbd>F4</kbd> eve
 
 ### Is it a virus?
 
-No. You can check the code and pack it yourself if you don't trust me. 🙂  
+No of course not. Review the code and pack it yourself to be extra safe. 🙂  
 It might get detected as a keylogger by your antivirus software since it hooks keyboard events.
+Hence the mixed results on VirusTotal.
 
 ## Setup for development
 
