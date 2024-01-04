@@ -72,8 +72,8 @@ I play about 6 builds on the engineer and don't want to unbind <kbd>F4</kbd> eve
 ### Is it a virus?
 
 No of course not. Review the code and pack it yourself to be extra safe. 🙂  
-It might get detected as a keylogger by your antivirus software since it hooks keyboard events.
-Hence the mixed results on VirusTotal.
+It might get detected as a keylogger by your antivirus software since it hooks keyboard events.  
+Hence the mixed results on [VirusTotal (for version 1.1.0)](https://www.virustotal.com/gui/file/fdbedb26f2c2a4c2f66b06aa5d7e2bbf49fce663256a822e3aa77c170aa6aff1).
 
 ## Setup for development
 
