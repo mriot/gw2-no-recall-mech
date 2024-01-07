@@ -139,6 +139,7 @@ class KeybindManager:
 
 
 def observer(mumble_link: MumbleLink, keybinds: KeybindManager) -> None:
+    silenced = False
     while not mumble_link.memfile.closed:
         mumble_link.read()
 
@@ -154,12 +155,14 @@ def observer(mumble_link: MumbleLink, keybinds: KeybindManager) -> None:
         # release if bit 4 is not set (game is not focused)
         if not (int(mumble_link.context.uiState) & 0b0001000):  # type: ignore
             keybinds.release(silent=True)
+            silenced = True
             sleep(1)
             continue
 
         # release if bit 6 is set (textbox is focused)
         if int(mumble_link.context.uiState) & 0b0100000:  # type: ignore
             keybinds.release(silent=True)
+            silenced = True
             sleep(0.25) # react faster
             continue
 
@@ -168,10 +171,11 @@ def observer(mumble_link: MumbleLink, keybinds: KeybindManager) -> None:
 
         # engineer with mechanist spec
         if id.get("profession") == 3 and id.get("spec") == 70:
-            keybinds.suppress()
+            keybinds.suppress(silent=silenced)
         else:
             keybinds.release()
 
+        silenced = False
         sleep(0.5)
 
 
