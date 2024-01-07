@@ -119,6 +119,7 @@ class KeybindManager:
 
         keyboard.unhook(self.keyboard_hook)
         self.keyboard_hook = None
+        self.pressed_keys.clear() # clear to prevent stuck keys
         if not silent:
             self.tray.notify("KEYBINDS RELEASED", " ")
 
