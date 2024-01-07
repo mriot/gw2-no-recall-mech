@@ -170,7 +170,7 @@ def main():
     icon = Image.open(os.path.join(unpack_dir, "mech.png"))
     tray = Icon(
         "GW2 NoRecallMech",
-        title="GW2 NoRecallMech",
+        title="GW2 NoRecallMech v1.2",
         icon=icon,
         menu=Menu(MenuItem("Exit", lambda: tray.stop())),
     )
