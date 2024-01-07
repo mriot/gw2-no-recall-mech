@@ -8,9 +8,9 @@
       "name": "Python: Current File",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal",
-      "args": ["--hotkey=f4"],
+      "args": ["--keybinds=shift+4;f4"],
       "justMyCode": true
     }
   ]
