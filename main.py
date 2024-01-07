@@ -3,7 +3,6 @@ import ctypes
 import json
 import mmap
 import os
-import subprocess
 import sys
 from socket import socket
 from threading import Thread
@@ -11,6 +10,7 @@ from time import sleep
 
 import keyboard
 from PIL import Image
+from psutil import pid_exists
 from pystray import Icon, Menu, MenuItem
 
 
@@ -138,7 +138,7 @@ def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
         mumble_link.read()
 
         # uint32_t uiState; Bitmask: Bit 4 (Game has focus)
-        if not process_exists("gw2-64.exe") or not (int(mumble_link.context.uiState) & 0b0001000):  # type: ignore
+        if not pid_exists(mumble_link.context.processId) or not (int(mumble_link.context.uiState) & 0b0001000):  # type: ignore
             hotkey.release()
             sleep(1)
             continue
@@ -197,15 +197,6 @@ def main():
 
     tray.run()  # blocks until tray.stop() is called
     ml.close()
-
-
-def process_exists(process_name: str) -> bool:
-    result = subprocess.run(
-        ["tasklist", "/FI", f"IMAGENAME eq {process_name}"],
-        capture_output=True,
-        text=True,
-    )
-    return process_name.lower() in result.stdout.lower()
 
 
 if __name__ == "__main__":
