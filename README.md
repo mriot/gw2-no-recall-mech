@@ -11,7 +11,7 @@ If you tab out of the game or change your build to another spec, the keybind wil
 ## Usage
 
 Download `NoRecallMech.exe` from the [latest release](https://github.com/mriot/gw2-no-recall-mech/releases) and place it anywhere you want.  
-[Is this a virus?](#is-it-a-virus)
+[Is this a virus?](#is-it-a-virus) <small>(spoiler: no)</small>
 
 You can start the tool before launching GW2 or after, it will detect the game either way.  
 While it runs a little Mechanist icon <img src="./mech.png" align="top" height="22" alt="mech"> will show in your system tray. Right click it to exit.
@@ -65,15 +65,10 @@ Yes, pretty safe I'd say. It uses the offical [Mumble Link API](https://wiki.gui
 Your hotkey for "Recall Mech" gets caught and suppressed before it reaches the game.  
 The tool does not interact with the game at all.
 
-### Why not use class specific keybinds?
-
-I play about 6 builds on the engineer and don't want to unbind <kbd>F4</kbd> every time I switch to a mech build.
-
 ### Is it a virus?
 
 No of course not. Review the code and pack it yourself to be extra safe. 🙂  
-It might get detected as a keylogger by your antivirus software since it hooks keyboard events.  
-Hence the mixed results on [VirusTotal (for version 1.1.0)](https://www.virustotal.com/gui/file/fdbedb26f2c2a4c2f66b06aa5d7e2bbf49fce663256a822e3aa77c170aa6aff1).
+It might get detected as a keylogger by your antivirus software. This is because it hooks keyboard events in order to suppress them.
 
 ## Setup for development
 
