@@ -123,9 +123,9 @@ class KeybindManager:
             self.tray.notify("KEYBINDS RELEASED", " ")
 
     def _on_key_event(self, event):
-        if event.event_type == "down":
+        if event.event_type == keyboard.KEY_DOWN:
             self.pressed_keys.add(event.scan_code)
-        elif event.event_type == "up":
+        elif event.event_type == keyboard.KEY_UP:
             self.pressed_keys.discard(event.scan_code)
             return True  # as we are releasing keys, there's no need to go further
 
