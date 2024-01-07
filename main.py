@@ -88,70 +88,91 @@ class MumbleLink:
         return ctype_instance
 
 
-class HotkeyManager:
-    def __init__(self, hotkey: str, tray: Icon):
+class KeybindManager:
+    def __init__(self, keybinds: str, tray: Icon):
         self.tray = tray
-        self.hotkey = hotkey
-        self.hotkey_set = set()  # scan code(s) of our hotkey
-        self.active_keys = set()  # scan codes of all currently pressed keys
+        self.keybinds = keybinds
+        self.keybind_sets = self._make_keybind_sets()  # scan codes of user keybinds
+        self.pressed_keys = set()  # scan codes of all currently pressed keys
         self.keyboard_hook = None
-        self._make_hotkey_set()
 
-    def _make_hotkey_set(self):
-        for key in self.hotkey.split("+"):
-            self.hotkey_set.add(
-                keyboard.key_to_scan_codes(key)[0]  # not sure what index 1 is for
-            )
+    def _make_keybind_sets(self):
+        keybind_sets = []
+        for keybind_string in self.keybinds.split(";"):
+            keybind_set = set()
+            for key in keybind_string.split("+"):
+                keybind_set.add(keyboard.key_to_scan_codes(key)[0])
+            keybind_sets.append(keybind_set)
+        return keybind_sets
 
-    def suppress(self):
+    def suppress(self, silent=False):
         if self.keyboard_hook:
             return None
 
         self.keyboard_hook = keyboard.hook(self._on_key_event, suppress=True)
-        self.tray.notify(f"{self.hotkey.upper()} DISABLED", " ")
+        if not silent:
+            self.tray.notify(f"{" and ".join(self.keybinds.upper().split(";"))} DISABLED", " ")
 
-    def release(self):
+    def release(self, silent=False):
         if not self.keyboard_hook:
             return None
 
         keyboard.unhook(self.keyboard_hook)
         self.keyboard_hook = None
-        self.tray.notify(f"{self.hotkey.upper()} ENABLED", " ")
+        if not silent:
+            self.tray.notify("KEYBINDS RELEASED", " ")
 
     def _on_key_event(self, event):
         if event.event_type == "down":
-            self.active_keys.add(event.scan_code)
+            self.pressed_keys.add(event.scan_code)
         elif event.event_type == "up":
-            self.active_keys.discard(event.scan_code)
-            return True  # as we are releasing keys, there's no need to block
+            self.pressed_keys.discard(event.scan_code)
+            return True  # as we are releasing keys, there's no need to go further
 
-        # block our hotkey regardless of any additional keys
-        if self.hotkey_set.issubset(self.active_keys):
-            print(f"blocked {self.hotkey}")
-            return False  # block
+        # block our keybind regardless of any additional keys
+        for keybind_set in self.keybind_sets:
+            if keybind_set.issubset(self.pressed_keys):
+                print(f"blocked {self.keybinds}")
+                return False  # block
 
         return True  # pass
 
 
-def observer(mumble_link: MumbleLink, hotkey: HotkeyManager) -> None:
+def observer(mumble_link: MumbleLink, keybinds: KeybindManager) -> None:
     while not mumble_link.memfile.closed:
         mumble_link.read()
 
-        # uint32_t uiState; Bitmask: Bit 4 (Game has focus)
-        if not pid_exists(mumble_link.context.processId) or not (int(mumble_link.context.uiState) & 0b0001000):  # type: ignore
-            hotkey.release()
+        # uiState bitmask: 1=MapOpen, 2=CompassTopRight, 3=CompassRotation,
+        # 4=GameFocus, 5=Competitive, 6=TextboxFocus, 7=Combat
+
+        # release if GW2 is not running
+        if not pid_exists(mumble_link.context.processId):  # type: ignore
+            keybinds.release()
+            sleep(5) # dont check too often
+            continue
+
+        # release if bit 4 is not set (game is not focused)
+        if not (int(mumble_link.context.uiState) & 0b0001000):  # type: ignore
+            keybinds.release(silent=True)
             sleep(1)
+            continue
+
+        # release if bit 6 is set (textbox is focused)
+        if int(mumble_link.context.uiState) & 0b0100000:  # type: ignore
+            keybinds.release(silent=True)
+            sleep(0.25) # react faster
             continue
 
         # print(mumble_link.data.identity)
         id = json.loads(str(mumble_link.data.identity))
 
+        # engineer with mechanist spec
         if id.get("profession") == 3 and id.get("spec") == 70:
-            hotkey.suppress()
+            keybinds.suppress()
         else:
-            hotkey.release()
+            keybinds.release()
 
-        sleep(1)
+        sleep(0.5)
 
 
 def main():
@@ -170,22 +191,18 @@ def main():
     icon = Image.open(os.path.join(unpack_dir, "mech.png"))
     tray = Icon(
         "GW2 NoRecallMech",
-        title="GW2 NoRecallMech v1.2",
+        title="GW2 NoRecallMech v1.3",
         icon=icon,
         menu=Menu(MenuItem("Exit", lambda: tray.stop())),
     )
 
     try:
         parser = argparse.ArgumentParser(description="GW2 NoRecallMech")
-        parser.add_argument(
-            "--hotkey",
-            help="Specify the hotkey that should be deactivated while playing as machanist.\n\nUse the format: ctrl+shift+k.",
-            default="f4",
-        )
+        parser.add_argument("--keybinds", default="f4")
         args = parser.parse_args()
-        hkm = HotkeyManager(args.hotkey, tray)
+        hkm = KeybindManager(args.keybinds, tray)
     except argparse.ArgumentError as e:
-        tray.notify("❌ Error with hotkey", str(e))
+        tray.notify("❌ Error with keybinds", str(e))
         sys.exit(1)
 
     try:
