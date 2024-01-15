@@ -57,6 +57,15 @@ As a result, if you continuously hold your hotkey down, subsequent keypresses wi
 
 However, in my tests, this wasn't really an issue. In fact I didn't even notice it at all as you typically tap the hotkey briefly by accident rather than holding it down for extended periods.
 
+#### Chat, search and other text inputs
+
+While GW2 does provide a way to detect if _certain_ text input fields are focused, not all are covered.  
+This means, your keybinds will not work while those fields are focused.  
+
+However, the most common ones like the chat, inventory, LFG, bank, hero panel, squad broadcast, mail, etc work just fine.  
+
+What's not covered are the search fields in the trading post and the party menu <kbd>p</kbd>.  
+
 ## FAQ
 
 ### How does it work? Is it safe?
