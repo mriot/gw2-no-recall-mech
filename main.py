@@ -161,10 +161,11 @@ def observer(mumble_link: MumbleLink, keybinds: KeybindManager) -> None:
             continue
 
         # release if bit 6 is set (textbox is focused)
+        # NOTE: does not work for all textboxes for some reason
         if int(mumble_link.context.uiState) & 0b0100000:  # type: ignore
             keybinds.release(silent=True)
             silenced = True
-            sleep(0.25) # react faster
+            sleep(0.1) # react faster while in textbox
             continue
 
         # print(mumble_link.data.identity)
