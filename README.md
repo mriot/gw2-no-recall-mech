@@ -86,7 +86,7 @@ It might get detected as a keylogger by your antivirus software. This is because
 Create a virtual environment and install the dependencies:
 
 ```bash
-python -m venv .venv; .venv\Scripts\activate; pip install pyinstaller -r requirements.txt
+pip install pyinstaller -r requirements.txt
 ```
 
 Build the .exe with pyinstaller. See [build.bat](./build.bat)
